@@ -1,15 +1,12 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Entry not found: {{title}}
+    Search Results: {{title}}
 {% endblock %}
 
 {% block body %}
 
-  <h1> Error: Entry "{{title}}" does not exist</h1>
-
-  <p>The requested entry "{{title}}" does not exist on qwikipedia.</p>
-  <p>Check the <a href="{% url 'index' %}">index</a> page to see available articles.</p>
+  <h1>Search Results for "{{title}}":</h1>
 
   {% if related_titles %}
   <p>Related Entries:</p>
@@ -18,6 +15,9 @@
       <li><a href="{% url 'entry' title=title %}">{{title}}</a></li>
       {% endfor %}
     </ul>
+  {% else %}
+  <p>No search results found for "{{title}}" on qwikipedia.</p>
+  <p>Check the <a href="{% url 'index' %}">index</a> page to see available articles.</p>
   {% endif %}
 
 {% endblock %}
