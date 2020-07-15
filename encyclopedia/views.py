@@ -18,8 +18,15 @@ def entry(request, title):
     if entry_md:
         # Title exists, convert md to HTML and return rendered template
         entry_HTML = Markdown().convert(entry_md)
-        print(entry_HTML)
         return render(request, "encyclopedia/entry.html", {"title": title, "entry": entry_HTML})
     else:
-        return HttpResponse("Oops, could not find that entry!")
+        # Page does not exist, get links for similar titles:
+        related_titles = []
+        related = False
+        for entry_name in util.list_entries():
+            if title in entry_name or entry_name in title:
+                related = True
+                related_titles.append(entry_name)
+
+        return render(request, "encyclopedia/error.html", {"title": title, "related": related, "related_titles" : related_titles})
 

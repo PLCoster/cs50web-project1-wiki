@@ -1,0 +1,23 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Entry not found: {{title}}
+{% endblock %}
+
+{% block body %}
+
+  <h1> Error: Entry "{{title}}" does not exist</h1>
+
+  <p>The requested entry "{{title}}" does not exist on qwikipedia.</p>
+  <p>Check the <a href="{% url 'index' %}">index</a> page to see available articles.</p>
+
+  {% if related %}
+  <p>Related Entries:</p>
+    <ul>
+      {% for title in related_titles %}
+      <li><a href="{% url 'entry' title=title %}">{{title}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+{% endblock %}
