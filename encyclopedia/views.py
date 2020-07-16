@@ -1,3 +1,4 @@
+import random
 from django import forms
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -161,8 +162,15 @@ def edit(request, title):
             "search_form": SearchForm()
           })
 
+def random_title(request):
+    """ Takes user to a random encyclopedia entry """
 
+    # Get list of titles, pick one at random:
+    titles = util.list_entries()
+    title = random.choice(titles)
 
+    # Redirect to selected page:
+    return redirect(reverse('entry', args=[title]))
 
 
 
