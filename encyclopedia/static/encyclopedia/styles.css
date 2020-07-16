@@ -13,8 +13,13 @@ h1 {
 }
 
 textarea {
-    height: 90vh;
+    margin: 10px 0 10px 0;
+    height: 70vh;
     width: 80%;
+}
+
+input[type="submit"] {
+  display: block;
 }
 
 .main {

@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponse
 from markdown2 import Markdown
@@ -10,6 +11,14 @@ class SearchForm(forms.Form):
     title = forms.CharField(label='', widget=forms.TextInput(attrs={
       "class": "search",
       "placeholder": "Search Qwikipedia"}))
+
+class CreateForm(forms.Form):
+    """ Form Class for Creating New Entries """
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={
+      "placeholder": "Page Title"}))
+    text = forms.CharField(label='', widget=forms.Textarea(attrs={
+      "placeholder": "Enter Page Content using Github Markdown"
+    }))
 
 
 def index(request):
@@ -71,5 +80,44 @@ def search(request):
 
     # Otherwise form not posted or form not valid, return to index page:
     return redirect(reverse('index'))
+
+def create(request):
+    """ Lets users create a new page on the wiki """
+
+    # If reached via link, display the form:
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html", {
+          "create_form": CreateForm(),
+          "search_form": SearchForm()
+        })
+
+    # Otherwise if reached by form submission:
+    elif request.method == "POST":
+        form = CreateForm(request.POST)
+
+        # If form is valid, process the form:
+        if form.is_valid():
+          title = form.cleaned_data['title']
+          text = form.cleaned_data['text']
+        else:
+          messages.error(request, 'Entry form not valid, please try again!')
+          return render(request, "encyclopedia/create.html", {
+            "create_form": form,
+            "search_form": SearchForm()
+          })
+
+        # Check that title does not already exist:
+        if util.get_entry(title):
+            messages.error(request, 'This page title already exists! Please go to that title page and edit it instead!')
+            return render(request, "encyclopedia/create.html", {
+              "create_form": form,
+              "search_form": SearchForm()
+            })
+        # Otherwise save new title file to disk, take user to new page:
+        else:
+            util.save_entry(title, text)
+            messages.success(request, f'New page "{title}" created successfully!')
+            return redirect(reverse('entry', args=[title]))
+
 
 
