@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <h1>All Pages</h1>
+    <h1> Welcome to Qwikipedia!</h1>
+
+    <p>Qwikipedia is a wikipedia-like website, made as a student project for Harvard's CS50 Web course. Users can search, view, create and edit entry pages on the site. Github Markdown is used to input the page contents, which is converted to HTML when users request an entry page.</p>
+
+    <h2>All Pages:</h2>
 
     <ul>
         {% for entry in entries %}

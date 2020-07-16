@@ -20,6 +20,12 @@ class CreateForm(forms.Form):
       "placeholder": "Enter Page Content using Github Markdown"
     }))
 
+class EditForm(forms.Form):
+  """ Form Class for Editing Entries """
+  text = forms.CharField(label='', widget=forms.Textarea(attrs={
+      "placeholder": "Enter Page Content using Github Markdown"
+    }))
+
 
 def index(request):
     """ Home Page on Site, displays all available entries """
@@ -33,7 +39,7 @@ def entry(request, title):
 
     entry_md = util.get_entry(title)
 
-    if entry_md:
+    if entry_md != None:
         # Title exists, convert md to HTML and return rendered template
         entry_HTML = Markdown().convert(entry_md)
         return render(request, "encyclopedia/entry.html", {
@@ -118,6 +124,45 @@ def create(request):
             util.save_entry(title, text)
             messages.success(request, f'New page "{title}" created successfully!')
             return redirect(reverse('entry', args=[title]))
+
+def edit(request, title):
+    """ Lets users edit an already existing page on the wiki """
+
+    # If reached via editing link, return form with post to edit:
+    if request.method == "GET":
+        text = util.get_entry(title)
+
+        # If title does not exist, return to index with error:
+        if text == None:
+            messages.error(request, f'"{title}"" page does not exist and can\'t be edited, please create a new page instead!')
+
+        # Otherwise return pre-populated form:
+        return render(request, "encyclopedia/edit.html", {
+          "title": title,
+          "edit_form": EditForm(initial={'text':text}),
+          "search_form": SearchForm()
+        })
+
+    # If reached via posting form, updated page and redirect to page:
+    elif request.method == "POST":
+        form = EditForm(request.POST)
+
+        if form.is_valid():
+          text = form.cleaned_data['text']
+          util.save_entry(title, text)
+          messages.success(request, f'Entry "{title}" updated successfully!')
+          return redirect(reverse('entry', args=[title]))
+
+        else:
+          messages.error(request, f'Editing form not valid, please try again!')
+          return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "edit_form": form,
+            "search_form": SearchForm()
+          })
+
+
+
 
 
 
