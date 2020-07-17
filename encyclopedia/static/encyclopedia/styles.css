@@ -41,3 +41,7 @@ input[type="submit"] {
 .sidebar h2 {
     margin-top: 5px;
 }
+
+.logo {
+  width: 100%;
+}
