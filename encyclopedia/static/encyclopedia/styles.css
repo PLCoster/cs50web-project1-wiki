@@ -16,6 +16,7 @@ textarea {
     margin: 10px 0 10px 0;
     height: 65vh;
     width: 80%;
+    display: block;
 }
 
 input[type="submit"] {
