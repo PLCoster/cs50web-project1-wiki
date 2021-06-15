@@ -43,7 +43,7 @@ The aim of this project was to build a Wikipedia-like online encyclopedia using 
 
 ### Project Writeup:
 
-This project is a Wikipedia style encyclopedia website calle Qwikipedia, built using the Django web framework.
+This project is a Wikipedia style encyclopedia website called Qwikipedia, built using the Django web framework.
 
 On the main page of the website, users are greeted with a welcome message and a list of links to all the articles currently available on the website.
 
@@ -59,3 +59,9 @@ Finally a 'Random Page' link is available in the side bar which when clicked wil
 
 Django form classes are used to handle all the forms on the site. The Django messages framework is also used to display success or error messages to the user when they attempt to create or edit articles.
 
+### Usage:
+
+Requires Python(3) and the Python Pacakage Installe (pip) to run:
+
+* Install requirements (Django): `pip install -r requirements.txt`
+* Run the app locally: `python manage.py runserver`
